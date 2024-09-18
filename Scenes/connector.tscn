@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://cs47w4t44pjwc"]
+
+[ext_resource type="Script" path="res://Scripts/connector.gd" id="1_trlua"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_htgkq"]
+size = Vector2(0.25, 45)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y4e5x"]
+size = Vector2(0, 43)
+
+[node name="Connector" type="Node2D"]
+script = ExtResource("1_trlua")
+
+[node name="RightColorRect" type="ColorRect" parent="."]
+offset_left = 332.0
+offset_top = -34.0
+offset_right = 362.0
+offset_bottom = 11.0
+color = Color(0, 0, 0, 1)
+
+[node name="Area2D" type="Area2D" parent="RightColorRect"]
+position = Vector2(7, 19)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightColorRect/Area2D"]
+position = Vector2(-4.125, 3)
+shape = SubResource("RectangleShape2D_htgkq")
+
+[node name="LeftColorRect" type="ColorRect" parent="."]
+offset_left = -362.0
+offset_top = -34.0
+offset_right = -334.0
+offset_bottom = 11.0
+color = Color(0, 0, 0, 1)
+
+[node name="Area2D" type="Area2D" parent="LeftColorRect"]
+position = Vector2(20, 17)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftColorRect/Area2D"]
+position = Vector2(6, 5)
+shape = SubResource("RectangleShape2D_y4e5x")
+
+[connection signal="body_entered" from="RightColorRect/Area2D" to="." method="_on_right_area_body_entered"]
+[connection signal="body_exited" from="RightColorRect/Area2D" to="." method="_on_right_area_body_exited"]
+[connection signal="body_entered" from="LeftColorRect/Area2D" to="." method="_on_left_area_body_entered"]
+[connection signal="body_exited" from="LeftColorRect/Area2D" to="." method="_on_left_area_body_exited"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://dmuwrgwyo6lmd"]
+
+[ext_resource type="Texture2D" uid="uid://bwh3pnp6rcycn" path="res://Assets/Ghost/Ghost_Body_01.png" id="1_7qeli"]
+[ext_resource type="Script" path="res://Scripts/ghost.gd" id="1_agdq5"]
+[ext_resource type="Texture2D" uid="uid://gcljnvys5tll" path="res://Assets/Ghost/Ghost_Eyes_Down.png" id="2_pb2ao"]
+[ext_resource type="Resource" uid="uid://dphxl0pxr76gl" path="res://Resoures/red_movement_targets.tres" id="2_y6iti"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8vb6n"]
+radius = 8.0
+
+[node name="Ghost" type="Area2D" node_paths=PackedStringArray("scatter_targets")]
+script = ExtResource("1_agdq5")
+movement_targets = ExtResource("2_y6iti")
+scatter_targets = [null, null, null, null]
+
+[node name="BodySprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_7qeli")
+
+[node name="EyeSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_pb2ao")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_8vb6n")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
