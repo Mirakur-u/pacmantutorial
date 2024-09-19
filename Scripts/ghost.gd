@@ -47,7 +47,8 @@ func move_ghost(next_position: Vector2, delta: float):
 	var new_velocity = (next_position - current_ghost_position).normalized() * speed * delta
 	calculate_direction(new_velocity)
 	position += new_velocity
-	#scatter()
+	if current_state == GhostState.SCATTER:
+		scatter()
 
 func calculate_direction(new_velocity: Vector2):
 	
@@ -73,14 +74,16 @@ func calculate_direction(new_velocity: Vector2):
 func setup():
 	navigation_agent_2d.set_navigation_map(tile_map.get_navigation_map(0))
 	NavigationServer2D.agent_set_map(navigation_agent_2d.get_rid(), tile_map.get_navigation_map(0))
+	scatter_timer.start()
 	scatter()
 
 
 func scatter():
-	scatter_timer.start()
-	current_state = GhostState.SCATTER
 	navigation_agent_2d.target_position = scatter_targets[current_scatter_index].position
-	
+	current_state = GhostState.SCATTER
+	if current_state != GhostState.SCATTER:
+		scatter_timer.start()
+
 
 
 func on_position_reached():

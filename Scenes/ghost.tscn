@@ -14,6 +14,21 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_8vb6n"]
 radius = 8.0
 
+[sub_resource type="Animation" id="Animation_k706p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_7qeli")]
+}
+
 [sub_resource type="Animation" id="Animation_mh2uo"]
 resource_name = "default"
 length = 0.5
@@ -31,31 +46,15 @@ tracks/0/keys = {
 "values": [ExtResource("1_7qeli"), ExtResource("6_4v27v")]
 }
 
-[sub_resource type="Animation" id="Animation_k706p"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BodySprite:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("1_7qeli")]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5h353"]
 _data = {
 "RESET": SubResource("Animation_k706p"),
 "default": SubResource("Animation_mh2uo")
 }
 
-[node name="Ghost" type="Area2D" node_paths=PackedStringArray("scatter_targets")]
+[node name="Ghost" type="Area2D"]
 script = ExtResource("1_agdq5")
 movement_targets = ExtResource("2_y6iti")
-scatter_targets = [null, null, null, null]
 
 [node name="BodySprite" type="Sprite2D" parent="."]
 texture = ExtResource("1_7qeli")
