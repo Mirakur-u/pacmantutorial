@@ -1,12 +1,56 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmuwrgwyo6lmd"]
+[gd_scene load_steps=15 format=3 uid="uid://dmuwrgwyo6lmd"]
 
 [ext_resource type="Texture2D" uid="uid://bwh3pnp6rcycn" path="res://Assets/Ghost/Ghost_Body_01.png" id="1_7qeli"]
 [ext_resource type="Script" path="res://Scripts/ghost.gd" id="1_agdq5"]
 [ext_resource type="Texture2D" uid="uid://gcljnvys5tll" path="res://Assets/Ghost/Ghost_Eyes_Down.png" id="2_pb2ao"]
 [ext_resource type="Resource" uid="uid://dphxl0pxr76gl" path="res://Resoures/red_movement_targets.tres" id="2_y6iti"]
+[ext_resource type="Script" path="res://Scripts/ghost_body_sprite.gd" id="4_osvuf"]
+[ext_resource type="Texture2D" uid="uid://k486j4lctjb7" path="res://Assets/Ghost/Ghost_Body_02.png" id="6_4v27v"]
+[ext_resource type="Script" path="res://Scripts/ghost_eye_sprite.gd" id="6_5hlkl"]
+[ext_resource type="Texture2D" uid="uid://dcgg14tac7mou" path="res://Assets/Ghost/Ghost_Eyes_Up.png" id="7_4126c"]
+[ext_resource type="Texture2D" uid="uid://cvgpjfpg6poi1" path="res://Assets/Ghost/Ghost_Eyes_Left.png" id="8_mqj6x"]
+[ext_resource type="Texture2D" uid="uid://dw3xx2kpcbjrs" path="res://Assets/Ghost/Ghost_Eyes_Right.png" id="9_bag3c"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8vb6n"]
 radius = 8.0
+
+[sub_resource type="Animation" id="Animation_mh2uo"]
+resource_name = "default"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("1_7qeli"), ExtResource("6_4v27v")]
+}
+
+[sub_resource type="Animation" id="Animation_k706p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_7qeli")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5h353"]
+_data = {
+"RESET": SubResource("Animation_k706p"),
+"default": SubResource("Animation_mh2uo")
+}
 
 [node name="Ghost" type="Area2D" node_paths=PackedStringArray("scatter_targets")]
 script = ExtResource("1_agdq5")
@@ -15,11 +59,32 @@ scatter_targets = [null, null, null, null]
 
 [node name="BodySprite" type="Sprite2D" parent="."]
 texture = ExtResource("1_7qeli")
+script = ExtResource("4_osvuf")
 
 [node name="EyeSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_pb2ao")
+script = ExtResource("6_5hlkl")
+up = ExtResource("7_4126c")
+down = ExtResource("2_pb2ao")
+left = ExtResource("8_mqj6x")
+right = ExtResource("9_bag3c")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_8vb6n")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_5h353")
+}
+
+[node name="ScatterTimer" type="Timer" parent="."]
+wait_time = 8.0
+one_shot = true
+
+[node name="UpdateChasingTargetPositionTimer" type="Timer" parent="."]
+wait_time = 0.2
+
+[connection signal="timeout" from="ScatterTimer" to="." method="_on_scatter_timer_timeout"]
+[connection signal="timeout" from="UpdateChasingTargetPositionTimer" to="." method="_on_update_chasing_target_position_timer_timeout"]

@@ -1130,8 +1130,10 @@ position = Vector2(-180, -324)
 
 [node name="Ghosts" type="Node" parent="."]
 
-[node name="Ghost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "scatter_targets") instance=ExtResource("8_beuw4")]
-position = Vector2(-21, -84)
+[node name="Ghost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets") instance=ExtResource("8_beuw4")]
+position = Vector2(0, -84)
 scale = Vector2(2, 2)
 tile_map = NodePath("../../TileMap")
+color = Color(1, 0, 0, 1)
+chasing_target = NodePath("../../PacMan")
 scatter_targets = [NodePath("../../MovementTargets/RedGhost/Scatter/Red1"), NodePath("../../MovementTargets/RedGhost/Scatter/Red2"), NodePath("../../MovementTargets/RedGhost/Scatter/Red3"), NodePath("../../MovementTargets/RedGhost/Scatter/Red4")]
