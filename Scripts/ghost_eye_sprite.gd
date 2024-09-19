@@ -21,5 +21,4 @@ func _ready() -> void:
 
 
 func on_direction_change(direction: String):
-	print(direction)
 	texture = direction_lookup_table[direction]

@@ -80,9 +80,10 @@ func setup():
 
 func scatter():
 	navigation_agent_2d.target_position = scatter_targets[current_scatter_index].position
-	current_state = GhostState.SCATTER
 	if current_state != GhostState.SCATTER:
 		scatter_timer.start()
+		current_state = GhostState.SCATTER
+	
 
 
 
