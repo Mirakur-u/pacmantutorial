@@ -5,6 +5,7 @@ class_name Ghost
 enum GhostState {
 	SCATTER,
 	CHASE,
+	RUN_AWAY,
 }
 
 signal direction_change(current_direction:String)
@@ -12,10 +13,11 @@ signal direction_change(current_direction:String)
 var current_scatter_index = 0
 var direction = null
 var current_state: GhostState
+var is_blinking = false
 
 @export var speed = 120
 @export var movement_targets: Resource
-@export var tile_map: TileMap
+@export var tile_map: MazeTileMap
 @export var color: Color
 
 
@@ -24,11 +26,12 @@ var current_state: GhostState
 @export var at_home_targets: Array[Node2D]
 
 @onready var navigation_agent_2d: NavigationAgent2D = $NavigationAgent2D
-@onready var body_sprite: Sprite2D = $BodySprite
-@onready var eye_sprite: Sprite2D = $EyeSprite
+@onready var body_sprite: BodySprite = $BodySprite
+@onready var eye_sprite: EyeSprite = $EyeSprite
 @onready var scatter_timer: Timer = $ScatterTimer
 @onready var pac_man: PacMan = $"../../PacMan"
 @onready var update_chasing_target_position_timer: Timer = $UpdateChasingTargetPositionTimer
+@onready var run_away_timer: Timer = $RunAwayTimer
 
 func _ready() -> void:
 	navigation_agent_2d.path_desired_distance = 4.0
@@ -38,6 +41,8 @@ func _ready() -> void:
 	
 
 func _process(delta: float):
+	if !run_away_timer.is_stopped() && run_away_timer.time_left < run_away_timer.wait_time /2 && !is_blinking:
+		start_blinking()
 	move_ghost(navigation_agent_2d.get_next_path_position(), delta)
 	
 	
@@ -49,6 +54,7 @@ func move_ghost(next_position: Vector2, delta: float):
 	position += new_velocity
 	if current_state == GhostState.SCATTER:
 		scatter()
+
 
 func calculate_direction(new_velocity: Vector2):
 	
@@ -92,6 +98,8 @@ func on_position_reached():
 		scatter_position_reached()
 	elif current_state == GhostState.CHASE:
 		chase_position_reached()
+	elif current_state == GhostState.RUN_AWAY:
+		run_away_from_pacman()
 
 func scatter_position_reached():
 	if current_scatter_index < 3:
@@ -120,3 +128,25 @@ func _on_update_chasing_target_position_timer_timeout() -> void:
 
 func chase_position_reached():
 	print("KILL PACMAN")
+
+
+func run_away_from_pacman():
+	run_away_timer.start()
+	body_sprite.run_away()
+	eye_sprite.hide_eyes()
+	current_state = GhostState.RUN_AWAY
+	
+	update_chasing_target_position_timer.stop()
+	scatter_timer.stop()
+	
+	var empty_cell_position = tile_map.get_random_empty_cell_position()
+	navigation_agent_2d.target_position = empty_cell_position
+
+func start_blinking():
+	body_sprite.start_blinking
+
+func _on_run_away_timer_timeout() -> void:
+	is_blinking = false
+	eye_sprite.show_eyes()
+	body_sprite.move()
+	start_chasing_pacman()
