@@ -49,3 +49,8 @@ func can_move_in_direction(dir: Vector2, delta: float) -> bool:
 	shape_query.transform = global_transform.translated(dir*speed*delta*2)
 	var result = get_world_2d().direct_space_state.intersect_shape(shape_query)
 	return result.size() == 0
+
+func die():
+	set_collision_layer_value(1, false)
+	animation_player.play("death")
+	set_physics_process(false)

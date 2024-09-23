@@ -374,9 +374,8 @@ zoom = Vector2(0.812, 0.812)
 position = Vector2(-1, 204)
 scale = Vector2(3.42, 3.42)
 
-[node name="Pellets" type="Node" parent="." node_paths=PackedStringArray("ghost_array")]
+[node name="Pellets" type="Node" parent="."]
 script = ExtResource("3_vqjcu")
-ghost_array = [NodePath("../Ghosts/RedGhost"), NodePath("../Ghosts/PinkGhost"), NodePath("../Ghosts/BlueGhost"), NodePath("../Ghosts/YellowGhost")]
 
 [node name="Pellet" parent="Pellets" instance=ExtResource("3_5d4it")]
 position = Vector2(-180, -12)
@@ -1183,12 +1182,11 @@ position = Vector2(300, -324)
 [node name="Yellow4" type="Marker2D" parent="MovementTargets/YellowGhost/Scatter"]
 position = Vector2(300, -228)
 
-[node name="Home" type="Node" parent="MovementTargets/YellowGhost"]
+[node name="Node" type="Node" parent="MovementTargets/YellowGhost"]
 
-[node name="Bottom" type="Marker2D" parent="MovementTargets/YellowGhost/Home"]
-position = Vector2(-55, 7)
+[node name="Bottom" type="Marker2D" parent="MovementTargets/YellowGhost/Node"]
 
-[node name="Top" type="Marker2D" parent="MovementTargets/YellowGhost/Home"]
+[node name="Top" type="Marker2D" parent="MovementTargets/YellowGhost/Node"]
 position = Vector2(-1, -33)
 
 [node name="PinkGhost" type="Node" parent="MovementTargets"]
@@ -1196,47 +1194,14 @@ position = Vector2(-1, -33)
 [node name="Scatter" type="Node" parent="MovementTargets/PinkGhost"]
 
 [node name="Pink1" type="Marker2D" parent="MovementTargets/PinkGhost/Scatter"]
-position = Vector2(180, 132)
-
-[node name="Pink2" type="Marker2D" parent="MovementTargets/PinkGhost/Scatter"]
-position = Vector2(301, 132)
-
-[node name="Pink3" type="Marker2D" parent="MovementTargets/PinkGhost/Scatter"]
-position = Vector2(252, 276)
-
-[node name="Pink4" type="Marker2D" parent="MovementTargets/PinkGhost/Scatter"]
-position = Vector2(180, 276)
 
 [node name="Home" type="Node" parent="MovementTargets/PinkGhost"]
-
-[node name="Bottom" type="Marker2D" parent="MovementTargets/PinkGhost/Home"]
-position = Vector2(50, 11)
-
-[node name="Top" type="Marker2D" parent="MovementTargets/PinkGhost/Home"]
-position = Vector2(50, -24)
 
 [node name="BlueGhost" type="Node" parent="MovementTargets"]
 
 [node name="Scatter" type="Node" parent="MovementTargets/BlueGhost"]
 
-[node name="Blue1" type="Marker2D" parent="MovementTargets/BlueGhost/Scatter"]
-position = Vector2(-180, 132)
-
-[node name="Blue2" type="Marker2D" parent="MovementTargets/BlueGhost/Scatter"]
-position = Vector2(-300, 132)
-
-[node name="Blue3" type="Marker2D" parent="MovementTargets/BlueGhost/Scatter"]
-position = Vector2(-252, 276)
-
-[node name="Blue4" type="Marker2D" parent="MovementTargets/BlueGhost/Scatter"]
-position = Vector2(-180, 276)
-
 [node name="Home" type="Node" parent="MovementTargets/BlueGhost"]
-
-[node name="Bottom" type="Marker2D" parent="MovementTargets/BlueGhost/Home"]
-position = Vector2(0, 12)
-
-[node name="Top" type="Marker2D" parent="MovementTargets/BlueGhost/Home"]
 
 [node name="Ghosts" type="Node" parent="."]
 
@@ -1251,24 +1216,24 @@ at_home_targets = [NodePath("../../MovementTargets/RedGhost/Home/Bottom"), NodeP
 points_manage = NodePath("../../PointsManager")
 
 [node name="PinkGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "points_manage") instance=ExtResource("8_beuw4")]
-position = Vector2(-3, -26)
+position = Vector2(0, -84)
 scale = Vector2(2, 2)
 tile_map = NodePath("../../TileMap")
-color = Color(0.856718, 0.177856, 0.777789, 1)
+color = Color(1, 0, 0, 1)
 chasing_target = NodePath("../../PacMan")
-scatter_targets = [NodePath("../../MovementTargets/PinkGhost/Scatter/Pink1"), NodePath("../../MovementTargets/PinkGhost/Scatter/Pink2"), NodePath("../../MovementTargets/PinkGhost/Scatter/Pink3"), NodePath("../../MovementTargets/PinkGhost/Scatter/Pink4")]
-at_home_targets = [NodePath("../../MovementTargets/PinkGhost/Home/Bottom"), NodePath("../../MovementTargets/PinkGhost/Home/Top")]
+scatter_targets = [NodePath("../../MovementTargets/RedGhost/Scatter/Red1"), NodePath("../../MovementTargets/RedGhost/Scatter/Red2"), NodePath("../../MovementTargets/RedGhost/Scatter/Red3"), NodePath("../../MovementTargets/RedGhost/Scatter/Red4")]
+at_home_targets = [NodePath("../../MovementTargets/RedGhost/Home/Bottom"), NodePath("../../MovementTargets/RedGhost/Home/Top")]
 points_manage = NodePath("../../PointsManager")
 is_starting_at_home = true
 
 [node name="BlueGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "points_manage") instance=ExtResource("8_beuw4")]
-position = Vector2(39, -31)
+position = Vector2(0, -84)
 scale = Vector2(2, 2)
 tile_map = NodePath("../../TileMap")
-color = Color(0.464499, 0.655989, 0.993541, 1)
+color = Color(1, 0, 0, 1)
 chasing_target = NodePath("../../PacMan")
-scatter_targets = [NodePath("../../MovementTargets/BlueGhost/Scatter/Blue1"), NodePath("../../MovementTargets/BlueGhost/Scatter/Blue2"), NodePath("../../MovementTargets/BlueGhost/Scatter/Blue3"), NodePath("../../MovementTargets/BlueGhost/Scatter/Blue4")]
-at_home_targets = [NodePath("../../MovementTargets/BlueGhost/Home/Bottom"), NodePath("../../MovementTargets/BlueGhost/Home/Top")]
+scatter_targets = [NodePath("../../MovementTargets/RedGhost/Scatter/Red1"), NodePath("../../MovementTargets/RedGhost/Scatter/Red2"), NodePath("../../MovementTargets/RedGhost/Scatter/Red3"), NodePath("../../MovementTargets/RedGhost/Scatter/Red4")]
+at_home_targets = [NodePath("../../MovementTargets/RedGhost/Home/Bottom"), NodePath("../../MovementTargets/RedGhost/Home/Top")]
 points_manage = NodePath("../../PointsManager")
 is_starting_at_home = true
 
@@ -1279,7 +1244,7 @@ tile_map = NodePath("../../TileMap")
 color = Color(0.972549, 1, 0.180392, 1)
 chasing_target = NodePath("../../PacMan")
 scatter_targets = [NodePath("../../MovementTargets/YellowGhost/Scatter/Yellow1"), NodePath("../../MovementTargets/YellowGhost/Scatter/Yellow2"), NodePath("../../MovementTargets/YellowGhost/Scatter/Yellow3"), NodePath("../../MovementTargets/YellowGhost/Scatter/Yellow4")]
-at_home_targets = [NodePath("../../MovementTargets/YellowGhost/Home/Bottom"), NodePath("../../MovementTargets/YellowGhost/Home/Top")]
+at_home_targets = [NodePath("../../MovementTargets/YellowGhost/Node/Bottom"), NodePath("../../MovementTargets/YellowGhost/Node/Top")]
 points_manage = NodePath("../../PointsManager")
 is_starting_at_home = true
 

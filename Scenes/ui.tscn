@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://wjwbw7sl8g5b"]
+[gd_scene load_steps=5 format=3 uid="uid://wjwbw7sl8g5b"]
 
 [ext_resource type="Script" path="res://Scripts/ui.gd" id="1_j1s07"]
 [ext_resource type="FontFile" uid="uid://ccnln6n4c0g54" path="res://Assets/Fonts/upheavtt.ttf" id="1_xkhyj"]
+[ext_resource type="Theme" uid="uid://2uww12c7cace" path="res://Resoures/ui_theme.tres" id="2_3iiml"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0urlv"]
 bg_color = Color(0, 0, 0, 1)
@@ -51,6 +52,7 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_3iiml")
 theme_override_fonts/font = ExtResource("1_xkhyj")
 theme_override_font_sizes/font_size = 40
 text = "Game won!"
