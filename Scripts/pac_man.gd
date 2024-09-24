@@ -2,22 +2,30 @@ extends CharacterBody2D
 
 class_name PacMan
 
+signal player_died(lives: int)
+
 var next_movement_direction = Vector2.ZERO
 var movement_direction = Vector2.ZERO
 var shape_query = PhysicsShapeQueryParameters2D.new()
+var lives : int = 3
 
 @export var speed = 300
+@export var start_position: Node2D
 
 @onready var direction_pointer: Sprite2D = $DirectionPointer
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var player_start: Marker2D = $"../MovementTargets/PlayerStart"
+@onready var pacman_death_sound: AudioStreamPlayer2D = $"../SoundPlayers/PacmanDeathSound"
+@onready var power_pellet_sound: AudioStreamPlayer2D = $"../SoundPlayers/PowerPelletSound"
+@onready var ui: UI = $"../UI"
 
 func _ready():
 	shape_query.shape = collision_shape_2d.shape
 #	shape_query.collide_with_areas = false
 #	shape_query.collide_with_bodies = true
 	shape_query.collision_mask = 2
-	animation_player.play("default")
+	reset_player()
 
 
 func _physics_process(delta: float) -> void:
@@ -51,6 +59,28 @@ func can_move_in_direction(dir: Vector2, delta: float) -> bool:
 	return result.size() == 0
 
 func die():
+
+	power_pellet_sound.stop()
 	set_collision_layer_value(1, false)
 	animation_player.play("death")
 	set_physics_process(false)
+	pacman_death_sound.play()
+
+func reset_player():
+	animation_player.play("default")
+	position = start_position.position
+	set_collision_layer_value(1, true)
+	set_physics_process(true)
+	next_movement_direction = Vector2.ZERO
+	movement_direction = Vector2.ZERO
+
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	lives -= 1
+	#if lives == 0:
+	#	game_over()
+	if anim_name == "death":
+		ui.set_lives(lives)
+		player_died.emit(lives)
+		if lives >0:
+			reset_player()

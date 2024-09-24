@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://cpdcrtu5g0d7r"]
+[gd_scene load_steps=36 format=3 uid="uid://cpdcrtu5g0d7r"]
 
 [ext_resource type="Texture2D" uid="uid://di7lt8ehvdxdh" path="res://Assets/Walls/wall_atlas.png" id="1_33i2g"]
 [ext_resource type="PackedScene" uid="uid://c5l48qqr5v1rw" path="res://Scenes/pac_man.tscn" id="2_ptciw"]
@@ -10,6 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://wjwbw7sl8g5b" path="res://Scenes/ui.tscn" id="7_m2sbj"]
 [ext_resource type="PackedScene" uid="uid://dmuwrgwyo6lmd" path="res://Scenes/ghost.tscn" id="8_beuw4"]
 [ext_resource type="Script" path="res://Scripts/points_manager.gd" id="10_c06wi"]
+[ext_resource type="AudioStream" uid="uid://bu756i3lh25h3" path="res://Assets/Sounds/pacman_chomp.wav" id="11_xrxv1"]
+[ext_resource type="AudioStream" uid="uid://100ohtpyo02o" path="res://Assets/Sounds/pacman_eatghost.wav" id="12_h85kq"]
+[ext_resource type="AudioStream" uid="uid://c4b0pvuyylv4a" path="res://Assets/Sounds/pacman_power_pellet.wav" id="13_q5hsg"]
+[ext_resource type="AudioStream" uid="uid://bnxugtt2eriq0" path="res://Assets/Sounds/pacman_death.wav" id="14_hq3ux"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_hvkc7"]
 tile_data = PackedInt32Array(0, 458752, 0, 65536, 327680, 0, 131072, 65536, 1, 1, 131072, 0, 131073, 196608, 0, 2, 131072, 0, 131074, 196608, 0, 3, 393216, 0, 65539, 262144, 0, 131075, 0, 1)
@@ -370,9 +374,12 @@ script = ExtResource("2_uhdsd")
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.812, 0.812)
 
-[node name="PacMan" parent="." instance=ExtResource("2_ptciw")]
+[node name="UI" parent="." instance=ExtResource("7_m2sbj")]
+
+[node name="PacMan" parent="." node_paths=PackedStringArray("start_position") instance=ExtResource("2_ptciw")]
 position = Vector2(-1, 204)
 scale = Vector2(3.42, 3.42)
+start_position = NodePath("../MovementTargets/PlayerStart")
 
 [node name="Pellets" type="Node" parent="." node_paths=PackedStringArray("ghost_array")]
 script = ExtResource("3_vqjcu")
@@ -1135,8 +1142,6 @@ should_allow_eating_ghosts = true
 
 [node name="Connector" parent="." instance=ExtResource("5_k4ip7")]
 
-[node name="UI" parent="." instance=ExtResource("7_m2sbj")]
-
 [node name="MovementTargets" type="Node" parent="."]
 
 [node name="RedGhost" type="Node" parent="MovementTargets"]
@@ -1167,6 +1172,9 @@ position = Vector2(-56, 11)
 [node name="Top" type="Marker2D" parent="MovementTargets/RedGhost/Home"]
 position = Vector2(-56, -33)
 
+[node name="StartPos" type="Marker2D" parent="MovementTargets/RedGhost"]
+position = Vector2(0, -84)
+
 [node name="YellowGhost" type="Node" parent="MovementTargets"]
 
 [node name="Scatter" type="Node" parent="MovementTargets/YellowGhost"]
@@ -1190,6 +1198,9 @@ position = Vector2(-55, 7)
 
 [node name="Top" type="Marker2D" parent="MovementTargets/YellowGhost/Home"]
 position = Vector2(-1, -33)
+
+[node name="StartPos4" type="Marker2D" parent="MovementTargets/YellowGhost"]
+position = Vector2(-34, -4)
 
 [node name="PinkGhost" type="Node" parent="MovementTargets"]
 
@@ -1215,6 +1226,9 @@ position = Vector2(50, 11)
 [node name="Top" type="Marker2D" parent="MovementTargets/PinkGhost/Home"]
 position = Vector2(50, -24)
 
+[node name="StartPos3" type="Marker2D" parent="MovementTargets/PinkGhost"]
+position = Vector2(-3, -26)
+
 [node name="BlueGhost" type="Node" parent="MovementTargets"]
 
 [node name="Scatter" type="Node" parent="MovementTargets/BlueGhost"]
@@ -1238,9 +1252,15 @@ position = Vector2(0, 12)
 
 [node name="Top" type="Marker2D" parent="MovementTargets/BlueGhost/Home"]
 
+[node name="StartPos2" type="Marker2D" parent="MovementTargets/BlueGhost"]
+position = Vector2(39, -31)
+
+[node name="PlayerStart" type="Marker2D" parent="MovementTargets"]
+position = Vector2(-1, 204)
+
 [node name="Ghosts" type="Node" parent="."]
 
-[node name="RedGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "points_manage") instance=ExtResource("8_beuw4")]
+[node name="RedGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "starting_position", "points_manage") instance=ExtResource("8_beuw4")]
 position = Vector2(0, -84)
 scale = Vector2(2, 2)
 tile_map = NodePath("../../TileMap")
@@ -1248,9 +1268,10 @@ color = Color(1, 0, 0, 1)
 chasing_target = NodePath("../../PacMan")
 scatter_targets = [NodePath("../../MovementTargets/RedGhost/Scatter/Red1"), NodePath("../../MovementTargets/RedGhost/Scatter/Red2"), NodePath("../../MovementTargets/RedGhost/Scatter/Red3"), NodePath("../../MovementTargets/RedGhost/Scatter/Red4")]
 at_home_targets = [NodePath("../../MovementTargets/RedGhost/Home/Bottom"), NodePath("../../MovementTargets/RedGhost/Home/Top")]
+starting_position = NodePath("../../MovementTargets/RedGhost/StartPos")
 points_manage = NodePath("../../PointsManager")
 
-[node name="PinkGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "points_manage") instance=ExtResource("8_beuw4")]
+[node name="PinkGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "starting_position", "points_manage") instance=ExtResource("8_beuw4")]
 position = Vector2(-3, -26)
 scale = Vector2(2, 2)
 tile_map = NodePath("../../TileMap")
@@ -1258,10 +1279,11 @@ color = Color(0.856718, 0.177856, 0.777789, 1)
 chasing_target = NodePath("../../PacMan")
 scatter_targets = [NodePath("../../MovementTargets/PinkGhost/Scatter/Pink1"), NodePath("../../MovementTargets/PinkGhost/Scatter/Pink2"), NodePath("../../MovementTargets/PinkGhost/Scatter/Pink3"), NodePath("../../MovementTargets/PinkGhost/Scatter/Pink4")]
 at_home_targets = [NodePath("../../MovementTargets/PinkGhost/Home/Bottom"), NodePath("../../MovementTargets/PinkGhost/Home/Top")]
+starting_position = NodePath("../../MovementTargets/PinkGhost/StartPos3")
 points_manage = NodePath("../../PointsManager")
 is_starting_at_home = true
 
-[node name="BlueGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "points_manage") instance=ExtResource("8_beuw4")]
+[node name="BlueGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "starting_position", "points_manage") instance=ExtResource("8_beuw4")]
 position = Vector2(39, -31)
 scale = Vector2(2, 2)
 tile_map = NodePath("../../TileMap")
@@ -1269,10 +1291,11 @@ color = Color(0.464499, 0.655989, 0.993541, 1)
 chasing_target = NodePath("../../PacMan")
 scatter_targets = [NodePath("../../MovementTargets/BlueGhost/Scatter/Blue1"), NodePath("../../MovementTargets/BlueGhost/Scatter/Blue2"), NodePath("../../MovementTargets/BlueGhost/Scatter/Blue3"), NodePath("../../MovementTargets/BlueGhost/Scatter/Blue4")]
 at_home_targets = [NodePath("../../MovementTargets/BlueGhost/Home/Bottom"), NodePath("../../MovementTargets/BlueGhost/Home/Top")]
+starting_position = NodePath("../../MovementTargets/BlueGhost/StartPos2")
 points_manage = NodePath("../../PointsManager")
 is_starting_at_home = true
 
-[node name="YellowGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "points_manage") instance=ExtResource("8_beuw4")]
+[node name="YellowGhost" parent="Ghosts" node_paths=PackedStringArray("tile_map", "chasing_target", "scatter_targets", "at_home_targets", "starting_position", "points_manage") instance=ExtResource("8_beuw4")]
 position = Vector2(-34, -4)
 scale = Vector2(2, 2)
 tile_map = NodePath("../../TileMap")
@@ -1280,8 +1303,23 @@ color = Color(0.972549, 1, 0.180392, 1)
 chasing_target = NodePath("../../PacMan")
 scatter_targets = [NodePath("../../MovementTargets/YellowGhost/Scatter/Yellow1"), NodePath("../../MovementTargets/YellowGhost/Scatter/Yellow2"), NodePath("../../MovementTargets/YellowGhost/Scatter/Yellow3"), NodePath("../../MovementTargets/YellowGhost/Scatter/Yellow4")]
 at_home_targets = [NodePath("../../MovementTargets/YellowGhost/Home/Bottom"), NodePath("../../MovementTargets/YellowGhost/Home/Top")]
+starting_position = NodePath("../../MovementTargets/YellowGhost/StartPos4")
 points_manage = NodePath("../../PointsManager")
 is_starting_at_home = true
 
 [node name="PointsManager" type="Node" parent="."]
 script = ExtResource("10_c06wi")
+
+[node name="SoundPlayers" type="Node" parent="."]
+
+[node name="ChompSoundPlayer" type="AudioStreamPlayer2D" parent="SoundPlayers"]
+stream = ExtResource("11_xrxv1")
+
+[node name="EatGhostSound" type="AudioStreamPlayer2D" parent="SoundPlayers"]
+stream = ExtResource("12_h85kq")
+
+[node name="PowerPelletSound" type="AudioStreamPlayer2D" parent="SoundPlayers"]
+stream = ExtResource("13_q5hsg")
+
+[node name="PacmanDeathSound" type="AudioStreamPlayer2D" parent="SoundPlayers"]
+stream = ExtResource("14_hq3ux")

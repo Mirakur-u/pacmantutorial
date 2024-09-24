@@ -28,8 +28,10 @@ var is_blinking = false
 @export var chasing_target: Node2D
 @export var scatter_targets: Array[Node2D]
 @export var at_home_targets: Array[Node2D]
+@export var starting_position: Node2D
 @export var points_manage: PointsManager
 @export var is_starting_at_home: bool
+@export var starting_texture : Texture2D
 
 @onready var navigation_agent_2d: NavigationAgent2D = $NavigationAgent2D
 @onready var body_sprite: BodySprite = $BodySprite
@@ -41,11 +43,14 @@ var is_blinking = false
 @onready var points_label: Label = $PointsLabel
 @onready var points_manager: PointsManager = $"../../PointsManager"
 @onready var at_home_timer: Timer = $AtHomeTimer
+@onready var eat_ghost_sound: AudioStreamPlayer2D = $"../../SoundPlayers/EatGhostSound"
 
 func _ready() -> void:
+	pac_man.player_died.connect(setup)
 	navigation_agent_2d.path_desired_distance = 4.0
 	navigation_agent_2d.target_desired_distance = 4.0
 	navigation_agent_2d.target_reached.connect(on_position_reached)
+	body_sprite.texture = starting_texture
 	call_deferred("setup")
 	
 
@@ -88,6 +93,9 @@ func calculate_direction(new_velocity: Vector2):
 
 
 func setup():
+	position = starting_position.position
+	body_sprite.move()
+	body_sprite.visible
 	navigation_agent_2d.set_navigation_map(tile_map.get_navigation_map(0))
 	NavigationServer2D.agent_set_map(navigation_agent_2d.get_rid(), tile_map.get_navigation_map(0))
 	if is_starting_at_home:
@@ -200,6 +208,7 @@ func _on_body_entered(body: Node2D) -> void:
 		scatter()
 
 func get_eaten():
+	eat_ghost_sound.play()
 	body_sprite.hide()
 	eye_sprite.show_eyes()
 	points_label.show()
@@ -212,5 +221,4 @@ func get_eaten():
 
 
 func _on_at_home_timer_timeout() -> void:
-	is_starting_at_home = false
 	scatter()

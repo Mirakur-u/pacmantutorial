@@ -94,6 +94,7 @@ _data = {
 [node name="Ghost" type="Area2D"]
 script = ExtResource("1_agdq5")
 movement_targets = ExtResource("2_y6iti")
+starting_texture = ExtResource("1_7qeli")
 
 [node name="BodySprite" type="Sprite2D" parent="."]
 texture = ExtResource("1_7qeli")
